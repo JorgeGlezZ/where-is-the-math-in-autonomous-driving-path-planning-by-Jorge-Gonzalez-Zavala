@@ -51,16 +51,12 @@ RRT*, on the other hand, continues sampling even after finding a path, constantl
 
 RRT* follows the following steps:
 1. **Initialization**. It starts the *tree* with a *root node*. In this case, the vehicle's current position.
-```
-Each node will store:
-- Its coordinates
-- A pointer to its parent node
-- The accumulated `cost()` from the root node (usually distance)
-```
+> Each node will store:
+> - Its coordinates
+> - A pointer to its parent node
+> - The accumulated `cost()` from the root node (usually distance)
 2. **Sample Point**. A random point (`x_rand`) is generated within the *configuration space*. Occasionally, this new point is replaced with the *destination node* to **bias the tree toward the destination**.
-```
-The configuration space is the clear drivable space, avoiding obstacles and keeping within road constraints
-```
+> The configuration space is the clear drivable space, avoiding obstacles and keeping within road constraints
 3. **Nearest Node**. The closest previously *existing node* to `x_rand` is found.
 4. **Steering Toward Random Point**. Generate a new node (`x_new`) stepping from the nearest node toward `x_rand` using a fixed step size. Check that the connection is collision-free. `x_new` is initially steered from the nearest node, but the parent is not yet final. A better parent may be selected in the next step.
 5. **Node Neighborhood**. All nodes within a *fixed radius* of `x_new` are established as that node's neighborhood. The total cost `total_cost` of reaching `x_new` by going through each neighbor is individually calculated. The neighbor with the lowest `total_cost` is then reassigned as the new parent node of `x_new`.
@@ -73,7 +69,5 @@ total_cost = cost(neighbor) + distance(neighbor, x_new)
 new_cost = cost(x_new) + distance(x_new, neighbor)
 ```
 8. **Goal Connection Check**. If `x_new` is within the preset goal region, the *candidate solution path* from the root node to `x_new` is recorded.
-```
-NOTE: RRT* continues the iterations after a path to the destination is reached. It keeps optimizing the solution over time.
-```
+> NOTE: RRT* continues the iterations after a path to the destination is reached. It keeps optimizing the solution over time.
 RRT* can be configured to decide how many extra iterations it will perform after the destination is reached in several ways. For example, by defining a maximum number of iterations after the destination is first reached, by a time limit, or by defining a quality threshold for the path. In this project, the RRT* implementation is set to stop after a fixed number of iterations. This ensures a balance between exploration and optimization time. Even after the goal is reached, the algorithm will continue sampling and rewiring nodes to improve path efficiency before handing off the result to the smoothing phase.
