@@ -70,4 +70,5 @@ new_cost = cost(x_new) + distance(x_new, neighbor)
 ```
 8. **Goal Connection Check**. If `x_new` is within the preset goal region, the *candidate solution path* from the root node to `x_new` is recorded.
 > NOTE: RRT* continues the iterations after a path to the destination is reached. It keeps optimizing the solution over time.
+
 RRT* can be configured to decide how many extra iterations it will perform after the destination is reached in several ways. For example, by defining a maximum number of iterations after the destination is first reached, by a time limit, or by defining a quality threshold for the path. In this project, the RRT* implementation is set to stop after a fixed number of iterations. This ensures a balance between exploration and optimization time. Even after the goal is reached, the algorithm will continue sampling and rewiring nodes to improve path efficiency before handing off the result to the smoothing phase.
