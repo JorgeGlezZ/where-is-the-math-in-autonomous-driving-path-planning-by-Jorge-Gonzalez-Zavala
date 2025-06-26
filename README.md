@@ -16,7 +16,6 @@ In this project, I explored some foundational math behind path smoothing for aut
   <em>Image source: <a href="https://www.mathworks.com/help/driving/ug/smooth-a-planned-path.html">MathWorks – Smooth a Planned Path</a></em>
 </div>
 
-
 ### Updated Project Proposal
 
 For this project, I chose to explore a real-world problem tied to the growing presence of self-driving cars. Specifically, how these vehicles determine the path to follow when trying to reach a destination. This problem is known as **path planning**.
@@ -38,7 +37,13 @@ Academically, I have completed math courses, such as Calculus I-III, Differentia
 </div>
 <br>
 
-## Hands-On: Path Smoothing via Spline Optimization\
+<div align = "center">
+  <a href = "https://youtu.be/Ots5UGuIRbU"><img src = "https://i9.ytimg.com/vi/Ots5UGuIRbU/mqdefault.jpg?sqp=CJSA9sIG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGHIgWShBMA8=&rs=AOn4CLANkuRrKqzrqZ3wU__5InsRf2dvyg" alt = "Path Planning for Autonomous Vehicles - The Basics" width = "480" height = "360"/></a>
+  <p><em>My updated simple presentation video.</em></p>
+</div>
+<br>
+    
+## Hands-On: Path Smoothing via Spline Optimization
 ### Scope
 This project is focused entirely on **2D path planning**. Both the planner and the smoothing algorithms assume a flat plane with no changes in elevation. While real-world autonomous vehicles operate in a quasi-3D environment and consider orientation, velocity, and acceleration constraints, this implementation is limited to geometric pathfinding in a 2-dimensional space. The goal is to understand and demonstrate the mathematical foundation of planning and optimization before expanding into more complex models.
 
