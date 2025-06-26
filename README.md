@@ -35,7 +35,6 @@ Academically, I have completed math courses, such as Calculus I-III, Differentia
 <br>
 
 ## Hands-On: Path Smoothing via Spline Optimization\
-
 ### Scope
 This project is focused entirely on **2D path planning**. Both the planner and the smoothing algorithms assume a flat plane with no changes in elevation. While real-world autonomous vehicles operate in a quasi-3D environment and consider orientation, velocity, and acceleration constraints, this implementation is limited to geometric pathfinding in a 2-dimensional space. The goal is to understand and demonstrate the mathematical foundation of planning and optimization before expanding into more complex models.
 
@@ -78,23 +77,38 @@ Even if optimized to be short, paths resulting from the RRT* algorithm are not u
 
 In this project, it is done by smoothing the path via an optimization-based cost function. The optimization tries to balance **Fidelity** to the original path with geometric smoothness and feasibility.
 
-The focus of this project is on the numerical implementation of the optimization. So, the solutions are to be found using a computer. However, a smooth path is understood to be a continuous function. In other words, a function that is composed of an infinite number of points. Computers, at least the current common ones, work with finite sets of points. Fortunately, our initial path planner already gives us a path composed of only a few points. So, that should make things easier. Still, the path needs to become smoother.
+The focus of this project is on the numerical implementation of the optimization. So, the solutions are to be found using a computer. However, a smooth path is understood to be a continuous function. In other words, a function that is composed of an infinite number of points. Computers, at least the current common ones, work with finite sets of points. Fortunately, the initial path planner already outputs a sparse sequence of points. That should make our job a bit easier. Still, the path needs to become smoother.
 
-Before trying to make the path smoother, the number of points from the rough path is increased by linearly interpolating more points in between the existing ones. This way, our solution is still composed of a finite number of points, but the path will look smoother and more continuous. So, indeed, this makes things easier, since our domain is already discretized almost naturally.
+Before trying to make the path smoother, the number of points from the rough path is increased by linearly interpolating more points in between the existing ones. This way, our solution is still composed of a finite number of points, but the path will look smoother and more continuous. This naturally discretized domain, indeed, simplifies the problem and sets the stage for numerical optimization.
 
 ### From Random Trees to Drivable Paths
 Now that our path is formed by enough points, the next step is to smooth it out. Make it more realistic for a vehicle to follow. So, let's dive a little into some of the math behind the smoothing process.
 
 Being the rough path `g` and the optimized path `f`, the cost function is the following:
 
-$$C(f) = w_1 \cdot \text{length}(f) + w_2 \cdot \text{curvature}(f) + w_3 \cdot \text{jerk}(f) + w_4 \cdot \text{fidelity}(f, g) + $$
+$$C(f) = w_1 \cdot \text{length}(f) + w_2 \cdot \text{curvature}(f) + w_3 \cdot \text{jerk}(f) + w_4 \cdot \text{fidelity}(f, g)$$
 
-It is noticeable that only one of the terms of the equation depends on `g`, and the rest depend only on `f`. The reason for this is that the only term that will check for **Fidelity** is the fourth term. It will check how different the smooth path is from the rough path. The rest of the terms will check for **Length**, **Curvature**, and **Jerk**. More specifically, they will ensure that the length of the smooth path isn't much different from the length of the rough path, and that sharp turns and sudden changes in curvature are avoided, respectively. They do so by taking the derivative of the smooth path.
+It is noticeable that only one of the terms of the equation depends on `g`, and the rest depend only on `f`. The reason for this is that the only term that will check for **Fidelity** is the fourth term. It will check how different the smooth path is from the rough path. The rest of the terms will check for **Length**, **Curvature**, and **Jerk**. More specifically, they will ensure that the length of the smooth path isn't much different from the length of the rough path, discouraging detours, and that sharp turns and sudden changes in curvature are avoided, respectively. This allows for turns to be feasible for the vehicle and ride stability, and comfort. They do so by taking the derivative of the smooth path.
 
 In other words, the cost function will be composed of the zero, first, second, and third derivatives of the function `f`:
 
-$$J(f) = w_1 \int_s \| f(s) - g(s) \|^2 \, ds + w_2 \int_s \left\| \frac{df}{ds} \right\| \, ds + w_3 \int_s \left\| \frac{d^2f}{ds^2} \right\|^2 \, ds + w_4 \int_s \left\| \frac{d^3f}{ds^3} \right\|^2 \, ds$$
+$$J(f) = w_1 \int_L \| f(s) - g(s) \|^2 \, ds + w_2 \int_L \left\| \frac{df}{ds} \right\| \, ds + w_3 \int_L \left\| \frac{d^2f}{ds^2} \right\|^2 \, ds + w_4 \int_L \left\| \frac{d^3f}{ds^3} \right\|^2 \, ds$$
 
 Where all terms depend on `s`, the arc length of the path.
 
-$w~1~$, $w~2~$, $w~3~$, and $w~4~$ are weights. These weights allow us to adjust how much each term will affect the cost. The higher the weight, the higher the term will increase the cost. Since the optimization aims to minimize the cost function, the higher the weight, the less the term will be allowed to increase, and therefore contribute to the cost.
+Being our path non-continuous, the derivatives and integrals are **approximated** using finite differences. For example, $f' \approx \frac{f[i+1] - f[i]}{ds}.$
+
+### Weights Determination
+$w_1$, $w_2$, $w_3$, and $w_4$ are weights. These weights allow us to adjust how much each term will affect the cost. The higher the weight, the higher the term will increase the cost. Since the optimization aims to minimize the cost function, the higher the weight, the less the term will be allowed to increase, and therefore contribute to the cost.
+
+Each weight will have a specific importance depending on the type of driving, vehicle, and passengers. Nevertheless, one can estimate the weights for general purposes by aiming for a balance between drivability, obstacle avoidance (amount of deviation from the rough path), and comfort.
+
+In this project, the weights were chosen manually from what was observed during testing as follows: $w_1 = w_2 = w_3~ = 1$; $w_4 = 2$. Keeping length, curvature, and jerk with "equal" importance, while giving more emphasis to the fidelity and ensuring proper obstacle avoidance.
+
+It is worth noting, though, that the weights can also be determined using numerical methods. For this example, a second script was developed using **Bayesian Optimization** (via `scikit-optimize`). A scoring function based on collision risk and smoothness was used to find good weight combinations by evaluating candidate paths.
+
+A few tests were enough to clearly show that the assignment of the values for the weights is not unique. And that a few changes in the path or the road constraints can allow for very different combinations of weight values to be a relatively good choice.
+
+Speaking of **unique solutions**, is the path optimization solution unique?
+
+Well, the short answer is no. The function is naturally **non-convex** because it comes from a full dynamic and obstacle-aware case. In fact, the function might have several local minima, and while with our method, convergence is **probable**, it is not guaranteed to a global minimum. To mitigate local minima, our method uses the very same thing that makes the function inherently non-convex, the definition of an initial path, which works as a very well-initialized guess. Other factors that help with the mitigation are the densification of the initial path and running the optimization at multiple intervals.
