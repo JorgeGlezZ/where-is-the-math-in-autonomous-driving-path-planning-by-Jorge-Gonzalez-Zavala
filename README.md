@@ -134,3 +134,80 @@ I lost a decent-sized chunk of my work due to a computer crash, which was frustr
 Going forward, I would like to improve the dynamic part of the algorithm and extend the optimization to higher dimensions, including constraints like velocity and acceleration. I am also interested in making the weights adaptable in real-time, depending on the environment or driving goals. For example, a path in an urban environment might prioritize fidelity and jerk, while an off-road vehicle might favor shorter or more aggressive curves. Some code cleaning and optimizing would be very useful for computational speed and power, too.
 
 This project gave me a solid foundation in both the mathematical and practical sides of path smoothing. I feel confident about expanding it into more realistic driving systems in the future.
+
+
+<br>
+<br>
+<br>
+
+## References
+Onken, D., & Ruthotto, L. (2021). Discretize-Optimize vs. Optimize-Discretize for Time-Series Regression and Continuous Normalizing Flows.
+arXiv:2102.02661
+Provided theoretical insight into the difference between discretizing a continuous function before or after optimization—key to justifying the approach used in this project.
+
+ApolloAuto. Apollo: An Open Autonomous Driving Platform.
+https://github.com/ApolloAuto/apollo
+Offered real-world context for path planning and motion planning architecture used in autonomous vehicles.
+
+Cubic Spline Based Path Planning for UAV. International Journal of Computer Science and Mobile Computing.
+Described how cubic splines can be used to smooth UAV paths, closely aligned with the mathematical foundation of this project.
+
+Implementing B-Spline Path Planning Method Based on Roundabout Geometry Elements. ResearchGate.
+https://www.researchgate.net/publication/353942947
+Explained B-spline usage in real-world path constraints such as roundabouts, supporting spline-based modeling relevance.
+
+Python Numerical Methods. Chapter 17.03: Cubic Spline Interpolation.
+https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/chapter17.03-Cubic-Spline-Interpolation.html
+Provided a foundational explanation and implementation example of cubic splines in Python, supporting the core smoothing logic.
+
+SciPy Developers. Smoothing Splines.
+https://docs.scipy.org/doc/scipy/tutorial/interpolate/smoothing_splines.html
+Referenced for the implementation of spline-based smoothing functions using Python libraries.
+
+Eat Pred Love. Natural Cubic Splines Implementation with Python.
+https://medium.com/eatpredlove/natural-cubic-splines-implementation-with-python-edf68feb57aa
+Offered a clear step-by-step guide to building spline smoothing from scratch, used as inspiration for implementation and explanation style.
+
+Secretaría de Economía, Gobierno de México. Querétaro: Perfil Municipal.
+https://www.economia.gob.mx/datamexico/es/profile/geo/queretaro
+Used to contextualize local relevance and provide real data to back up claims for presentation video.
+
+Wolfram Demonstrations Project. Rapidly-Exploring Random Tree (RRT and RRT*).
+https://demonstrations.wolfram.com/RapidlyExploringRandomTreeRRTAndRRT/
+Illustrated how RRT and RRT* grow paths and their difference in exploration quality, foundational to the project’s pathfinding method.
+
+Sebastian Lague. A* Pathfinding (E01: algorithm explanation).
+https://www.youtube.com/watch?v=-L-WgKMFuhE
+Clarified how A* works and differs from sampling-based approaches like RRT. Helpful for comparing search strategies.
+
+Aaron Becker. RRT, RRT* & Random Trees.
+https://www.youtube.com/watch?v=Ob3BIJkQJEw
+Visualized how RRT and RRT* operate, which helped in presenting the planning process clearly in the video.
+
+Tübingen Machine Learning. Self-Driving Cars – Lecture 12.4 (Decision Making and Planning: Motion Planning).
+https://www.youtube.com/watch?v=PSX18U1fYEY
+Provided an academic context for motion planning within autonomous vehicles, especially trajectory evaluation.
+
+ones and zeros. A* (A-Star) Pathfinding Algorithm Visualization on a Real Map.
+https://www.youtube.com/watch?v=CgW0HPHqFE8
+Helped visualize the A* algorithm in action over a realistic map.
+
+MATLAB. Path Planning with A* and RRT | Autonomous Navigation, Part 4.
+https://www.youtube.com/watch?v=QR3U1dgc5RE
+Compared A* and RRT in the context of robotics path planning and illustrated practical simulation examples.
+
+VIRTUAL VEHICLE. Search-Based Optimal Motion Planning for Automated Driving.
+https://www.youtube.com/watch?v=D5XJ5ncSuqQ
+Introduced the notion of cost functions and their role in evaluating path quality in autonomous navigation.
+
+Eincode. A* Algorithm for Pathfinding – Step by Step Computation!
+https://www.youtube.com/watch?v=lvHMDL-x6tg
+Provided a tutorial-style breakdown of the A* algorithm for a general understanding of heuristic search.
+
+CGP Grey. The Simple Solution to Traffic.
+https://www.youtube.com/watch?v=iHzzSao6ypE
+Used as inspiration for the traffic problem.
+
+WOOD magazine. Lay Out Irregular Curves with Duck Splines.
+https://www.youtube.com/watch?v=PwGnyJJCPIg
+Demonstrated spline-like physical behavior using flexible materials, a tangible analogy for viewers.
