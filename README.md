@@ -141,16 +141,20 @@ This project gave me a solid foundation in both the mathematical and practical s
 <br>
 
 ## References
+PythonRobotics by Atsushi Sakai
+https://github.com/AtsushiSakai/PythonRobotics
+This repository served as the foundation and initial reference for my implementation of the RRT* path planner. I adapted and expanded upon its logic to fit my project structure, particularly in the integration with a smoothing optimization stage and visualization tools.
+
 Onken, D., & Ruthotto, L. (2021). Discretize-Optimize vs. Optimize-Discretize for Time-Series Regression and Continuous Normalizing Flows.
 arXiv:2102.02661
-Provided theoretical insight into the difference between discretizing a continuous function before or after optimization—key to justifying the approach used in this project.
+Provided theoretical insight into the difference between discretizing a continuous function before or after optimization. Key to justifying the approach used in this project.
 
 ApolloAuto. Apollo: An Open Autonomous Driving Platform.
 https://github.com/ApolloAuto/apollo
 Offered real-world context for path planning and motion planning architecture used in autonomous vehicles.
 
 Cubic Spline Based Path Planning for UAV. International Journal of Computer Science and Mobile Computing.
-Described how cubic splines can be used to smooth UAV paths, closely aligned with the mathematical foundation of this project.
+Described how cubic splines can be used to smooth UAV paths, closely aligned with the mathematical foundation of this project. Served as small dip into future possibilities.
 
 Implementing B-Spline Path Planning Method Based on Roundabout Geometry Elements. ResearchGate.
 https://www.researchgate.net/publication/353942947
