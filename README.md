@@ -3,7 +3,7 @@
 ## Introduction
 Path planning is a crucial component in autonomous vehicle navigation. It helps tell the vehicle where and how to move. Not just to reach a destination, but to do so safely, efficiently, and smoothly. Every time I’m stuck in traffic, I can’t help but imagine how much better things would be if cars were driven in a more coordinated and intelligent way. Not by humans who can get tired or distracted, but by machines that can react quickly and precisely, keeping mobility organized and predictable.
 
-<img src = "profile pic.jpg" width = "200" alt = "My Profile Picture">
+<img src = "profile pic.jpg" width = "100" alt = "My Profile Picture" align = "center">
 
 My name is **Jorge González Zavala**, and I am a Mechanical Systems Engineering student at the **Arkansas State University Campus Querétaro**. I have a deep interest in emerging technologies, especially those that aim to fix long-standing inefficiencies in daily life. One of those problems that frustrates me almost daily is traffic, especially in my city, where public mobility is limited and poorly planned. It makes it hard not to think, *there must be a better way*.
 
