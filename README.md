@@ -39,7 +39,7 @@ Academically, I have completed math courses, such as Calculus I-III, Differentia
 ### Scope
 This project is focused entirely on **2D path planning**. Both the planner and the smoothing algorithms assume a flat plane with no changes in elevation. While real-world autonomous vehicles operate in a quasi-3D environment and consider orientation, velocity, and acceleration constraints, this implementation is limited to geometric pathfinding in a 2-dimensional space. The goal is to understand and demonstrate the mathematical foundation of planning and optimization before expanding into more complex models.
 
-### From Random Trees to Drivable Paths
+### Random Trees for Path Planning
 Before the smoothing process, a path to smooth is needed. For this example, the **RRT\* (Rapidly-Exploring Random Tree Star)** algorithm will be used.
 
 Other classic shortest-path algorithms like **Dijkstra** or **A\*** work on a predefined grid of possible paths. In contrast, RRT and its variants are widely used in motion planning because of their ability to quickly explore large, continuous spaces and handle complex obstacles without a full grid map.
@@ -64,11 +64,37 @@ RRT* follows the following steps:
 total_cost = cost(neighbor) + distance(neighbor, x_new)
 ```
 6. **New Node Added to Tree**. `x_new` is now added as a vertex in the tree.
-7. **Tree Rewire**. A local optimization is run by computing what the `total_cost` would be for each node in the neighborhood of `x_new` if rewired through `x_new`. If the new cost (`new_cost`) is lower than the current `cost(neighbor)`, the parent of the neighbor node is reassigned to be `x_new` and its cost is updated.
+7. **Tree Rewire**. A local optimization is run by computing the `total_cost` for each node in the neighborhood of `x_new` if rewired through `x_new`. If the new cost (`new_cost`) is lower than the current `cost(neighbor)`, the parent of the neighbor node is reassigned to be `x_new` and its cost is updated.
 ```python
 new_cost = cost(x_new) + distance(x_new, neighbor)
 ```
 8. **Goal Connection Check**. If `x_new` is within the preset goal region, the *candidate solution path* from the root node to `x_new` is recorded.
 > NOTE: RRT* continues the iterations after a path to the destination is reached. It keeps optimizing the solution over time.
 
-RRT* can be configured to decide how many extra iterations it will perform after the destination is reached in several ways. For example, by defining a maximum number of iterations after the destination is first reached, by a time limit, or by defining a quality threshold for the path. In this project, the RRT* implementation is set to stop after a fixed number of iterations. This ensures a balance between exploration and optimization time. Even after the goal is reached, the algorithm will continue sampling and rewiring nodes to improve path efficiency before handing off the result to the smoothing phase.
+RRT* can be configured to decide how many extra iterations it will perform after reaching the destination in several ways. For example, by defining a maximum number of iterations after the destination is first reached, by a time limit, or by defining a quality threshold for the path. In this project, the RRT* implementation is set to stop after a fixed number of iterations. This ensures a balance between exploration and optimization time. Even after the goal is reached, the algorithm will continue sampling and rewiring nodes to improve path efficiency before handing off the result to the smoothing phase.
+
+### Discretization
+Even if optimized to be short, paths resulting from the RRT* algorithm are not usually realistically drivable. Some extra steps need to be performed on them to make them safe, efficient, and comfortable for an autonomous vehicle.
+
+In this project, it is done by smoothing the path via an optimization-based cost function. The optimization tries to balance **Fidelity** to the original path with geometric smoothness and feasibility.
+
+The focus of this project is on the numerical implementation of the optimization. So, the solutions are to be found using a computer. However, a smooth path is understood to be a continuous function. In other words, a function that is composed of an infinite number of points. Computers, at least the current common ones, work with finite sets of points. Fortunately, our initial path planner already gives us a path composed of only a few points. So, that should make things easier. Still, the path needs to become smoother.
+
+Before trying to make the path smoother, the number of points from the rough path is increased by linearly interpolating more points in between the existing ones. This way, our solution is still composed of a finite number of points, but the path will look smoother and more continuous. So, indeed, this makes things easier, since our domain is already discretized almost naturally.
+
+### From Random Trees to Drivable Paths
+Now that our path is formed by enough points, the next step is to smooth it out. Make it more realistic for a vehicle to follow. So, let's dive a little into some of the math behind the smoothing process.
+
+Being the rough path `g` and the optimized path `f`, the cost function is the following:
+
+$$C(f) = w_1 \cdot \text{length}(f) + w_2 \cdot \text{curvature}(f) + w_3 \cdot \text{jerk}(f) + w_4 \cdot \text{fidelity}(f, g) + $$
+
+It is noticeable that only one of the terms of the equation depends on `g`, and the rest depend only on `f`. The reason for this is that the only term that will check for **Fidelity** is the fourth term. It will check how different the smooth path is from the rough path. The rest of the terms will check for **Length**, **Curvature**, and **Jerk**. More specifically, they will ensure that the length of the smooth path isn't much different from the length of the rough path, and that sharp turns and sudden changes in curvature are avoided, respectively. They do so by taking the derivative of the smooth path.
+
+In other words, the cost function will be composed of the zero, first, second, and third derivatives of the function `f`:
+
+$$J(f) = w_1 \int_s \| f(s) - g(s) \|^2 \, ds + w_2 \int_s \left\| \frac{df}{ds} \right\| \, ds + w_3 \int_s \left\| \frac{d^2f}{ds^2} \right\|^2 \, ds + w_4 \int_s \left\| \frac{d^3f}{ds^3} \right\|^2 \, ds$$
+
+Where all terms depend on `s`, the arc length of the path.
+
+$w~1~$, $w~2~$, $w~3~$, and $w~4~$ are weights. These weights allow us to adjust how much each term will affect the cost. The higher the weight, the higher the term will increase the cost. Since the optimization aims to minimize the cost function, the higher the weight, the less the term will be allowed to increase, and therefore contribute to the cost.
