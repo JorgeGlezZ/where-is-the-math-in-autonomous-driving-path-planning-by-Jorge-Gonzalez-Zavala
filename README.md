@@ -3,6 +3,8 @@
 ## Introduction
 Path planning is a crucial component in autonomous vehicle navigation. It helps tell the vehicle where and how to move. Not just to reach a destination, but to do so safely, efficiently, and smoothly. Every time I’m stuck in traffic, I can’t help but imagine how much better things would be if cars were driven in a more coordinated and intelligent way. Not by humans who can get tired or distracted, but by machines that can react quickly and precisely, keeping mobility organized and predictable.
 
+<img src = "profile pic.jpg" width = "200" alt = "My Profile Picture">
+
 My name is **Jorge González Zavala**, and I am a Mechanical Systems Engineering student at the **Arkansas State University Campus Querétaro**. I have a deep interest in emerging technologies, especially those that aim to fix long-standing inefficiencies in daily life. One of those problems that frustrates me almost daily is traffic, especially in my city, where public mobility is limited and poorly planned. It makes it hard not to think, *there must be a better way*.
 
 In this project, I explored some foundational math behind path smoothing for autonomous vehicles. Specifically, I implemented an example of path smoothing using spline-based optimization in Python. This is just one small part of how a self-driving car figures out how to reach its destination. While initial path planners often generate a route that avoids obstacles and reaches the goal, those paths are not always smooth or even drivable by a real vehicle. A viable path must also respect limits on curvature, acceleration, and directional change. In other words, it needs to be smooth, continuous, and physically realistic. And that is where math comes in.
