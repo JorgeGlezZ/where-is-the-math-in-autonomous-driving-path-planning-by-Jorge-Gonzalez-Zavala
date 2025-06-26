@@ -32,13 +32,13 @@ I was particularly interested in learning to implement this using Python and num
 Academically, I have completed math courses, such as Calculus I-III, Differential Equations, Linear Algebra, and Numerical Methods. This project gave me the chance to apply those skills and understand a real and relevant engineering problem. Furthermore, since I focused my work on the **numerical implementation** of a cost-based optimization model, I got the chance to explore both the theory and the computational side of the problem.
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=PSX18U1fYEY&t=250s" target="_blank"><img src="https://i.ytimg.com/vi/PSX18U1fYEY/maxresdefault.jpg" alt="Self-Driving Cars - Lecture 12.4 (Decision Making and Planning: Motion Planning)" width="480" height="360"/></a>
+  <a href="https://www.youtube.com/watch?v=PSX18U1fYEY&t=250s" target="_blank"><img src="https://i.ytimg.com/vi/PSX18U1fYEY/maxresdefault.jpg" alt="Self-Driving Cars - Lecture 12.4 (Decision Making and Planning: Motion Planning)" width="480"/></a>
   <p><em>This video provides a clear basic explanation of how path planning optimization works (Recommended segment: 4:10 - 9:10).</em></p>
 </div>
 <br>
 
 <div align = "center">
-  <a href = "https://youtu.be/Ots5UGuIRbU"><img src = "https://i9.ytimg.com/vi/Ots5UGuIRbU/mqdefault.jpg?sqp=CJSA9sIG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGHIgWShBMA8=&rs=AOn4CLANkuRrKqzrqZ3wU__5InsRf2dvyg" alt = "Path Planning for Autonomous Vehicles - The Basics" width = "480" height = "360"/></a>
+  <a href = "https://youtu.be/Ots5UGuIRbU"><img src = "https://i9.ytimg.com/vi/Ots5UGuIRbU/mqdefault.jpg?sqp=CJSA9sIG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGHIgWShBMA8=&rs=AOn4CLANkuRrKqzrqZ3wU__5InsRf2dvyg" alt = "Path Planning for Autonomous Vehicles - The Basics" width = "480"/></a>
   <p><em>My updated simple presentation video.</em></p>
 </div>
 <br>
