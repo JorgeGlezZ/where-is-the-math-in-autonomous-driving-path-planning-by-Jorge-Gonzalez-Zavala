@@ -88,9 +88,9 @@ Being the rough path `g` and the optimized path `f`, the cost function is the fo
 
 $$C(f) = w_1 \cdot \text{length}(f) + w_2 \cdot \text{curvature}(f) + w_3 \cdot \text{jerk}(f) + w_4 \cdot \text{fidelity}(f, g)$$
 
-It is noticeable that only one of the terms of the equation depends on `g`, and the rest depend only on `f`. The reason for this is that the only term that will check for **Fidelity** is the fourth term. It will check how different the smooth path is from the rough path. The rest of the terms will check for **Length**, **Curvature**, and **Jerk**. More specifically, they will ensure that the length of the smooth path isn't much different from the length of the rough path, discouraging detours, and that sharp turns and sudden changes in curvature are avoided, respectively. This allows for turns to be feasible for the vehicle and ride stability, and comfort. They do so by taking the derivative of the smooth path.
+It is noticeable that only one of the terms of the equation depends on `g`, and the rest depend only on `f`. The reason for this is that the only term that will check for **Fidelity** is the fourth term. It will check how different the smooth path is from the rough path. The rest of the terms will check for **Length**, **Curvature**, and **Jerk**. More specifically, they will ensure that the length of the smooth path isn't much different from the length of the rough path, discouraging detours; and that sharp turns and sudden changes in curvature are avoided, ensuring feasible turning and improving both ride stability and comfort. They do so by taking the derivative of the smooth path.
 
-In other words, the cost function will be composed of the zero, first, second, and third derivatives of the function `f`:
+In other words, the cost function will be composed of the zero, first, second, and third derivatives of the function `f`, each penalized via their squared magnitude:
 
 $$J(f) = w_1 \int_L \| f(s) - g(s) \|^2 \, ds + w_2 \int_L \left\| \frac{df}{ds} \right\| \, ds + w_3 \int_L \left\| \frac{d^2f}{ds^2} \right\|^2 \, ds + w_4 \int_L \left\| \frac{d^3f}{ds^3} \right\|^2 \, ds$$
 
@@ -101,14 +101,32 @@ Being our path non-continuous, the derivatives and integrals are **approximated*
 ### Weights Determination
 $w_1$, $w_2$, $w_3$, and $w_4$ are weights. These weights allow us to adjust how much each term will affect the cost. The higher the weight, the higher the term will increase the cost. Since the optimization aims to minimize the cost function, the higher the weight, the less the term will be allowed to increase, and therefore contribute to the cost.
 
-Each weight will have a specific importance depending on the type of driving, vehicle, and passengers. Nevertheless, one can estimate the weights for general purposes by aiming for a balance between drivability, obstacle avoidance (amount of deviation from the rough path), and comfort.
+Each weight's importance may vary depending on the driving context, vehicle dynamics, or passenger sensitivity. Nevertheless, one can estimate the weights for general purposes by aiming for a balance between drivability, obstacle avoidance (amount of deviation from the rough path), and comfort.
 
 In this project, the weights were chosen manually from what was observed during testing as follows: $w_1 = w_2 = w_3~ = 1$; $w_4 = 2$. Keeping length, curvature, and jerk with "equal" importance, while giving more emphasis to the fidelity and ensuring proper obstacle avoidance.
 
 It is worth noting, though, that the weights can also be determined using numerical methods. For this example, a second script was developed using **Bayesian Optimization** (via `scikit-optimize`). A scoring function based on collision risk and smoothness was used to find good weight combinations by evaluating candidate paths.
 
-A few tests were enough to clearly show that the assignment of the values for the weights is not unique. And that a few changes in the path or the road constraints can allow for very different combinations of weight values to be a relatively good choice.
+A few tests clearly showed that the optimal weights are not unique. And that a few changes in the path or the road constraints can allow for very different combinations of weight values to be a relatively good choice. Still, more testing is necessary to reach a definitive conclusion.
 
 Speaking of **unique solutions**, is the path optimization solution unique?
 
 Well, the short answer is no. The function is naturally **non-convex** because it comes from a full dynamic and obstacle-aware case. In fact, the function might have several local minima, and while with our method, convergence is **probable**, it is not guaranteed to a global minimum. To mitigate local minima, our method uses the very same thing that makes the function inherently non-convex, the definition of an initial path, which works as a very well-initialized guess. Other factors that help with the mitigation are the densification of the initial path and running the optimization at multiple intervals.
+
+## Conclusions
+### Summary
+This project explored the process of turning rough, obstacle-avoiding paths generated by a custom RRT* algorithm into smooth, drivable trajectories using spline-based optimization. The cost function was designed to balance fidelity to the original path with geometric smoothness. Specifically, minimizing path length, curvature, and jerk. The final cost function integrated these elements using finite difference approximations and allowed tuning via weight parameters. The project was focused on the numerical implementation of the path optimization using Python and its libraries, such as *numpy, matplotlib, scipy, and scikit-optimize*.
+
+### My Experience
+Before this project, I had a basic notion about path planning and optimization concepts, but not at such a wide scope, and I had never implemented a full pipeline like this. From my math courses, including Calculus I-III, Differential Equations, Linear Algebra, and Numerical Methods, I had a good understanding of derivatives, integration, and cost functions, but I had not worked specifically with spline smoothing in a numerical context.
+
+My approach was to try to understand the math behind the main equation to be used for the numerical implementation before jumping into the code. I focused on first writing clear explanations of what needed to happen in the code, and then gradually implemented each component using Python. Checking every result was crucial, and fixing issues before moving on to the next step. This helped me avoid blind trial-and-error and made the debugging process manageable.
+
+One of the biggest challenges that I faced was balancing time for the theory and implementation equally. Tuning the RRT* algorithm for a more realistic result and then implementing a dynamic solution was probably the hardest and lengthiest part of the practical part. Finding out how to properly tune the weights was a big challenge, too. I used manual tuning at first, then explored Bayesian Optimization to find better values, which revealed how non-unique but context-sensitive the weight selection is.
+
+I lost a decent-sized chunk of my work due to a computer crash, which was frustrating, but having to redo that part of the work was also useful to clarify some concepts better. That part was unexpectedly helpful.
+
+### Future Perspective
+Going forward, I would like to improve the dynamic part of the algorithm and extend the optimization to higher dimensions, including constraints like velocity and acceleration. I am also interested in making the weights adaptable in real-time, depending on the environment or driving goals. For example, a path in an urban environment might prioritize fidelity and jerk, while an off-road vehicle might favor shorter or more aggressive curves. Some code cleaning and optimizing would be very useful for computational speed and power, too.
+
+This project gave me a solid foundation in both the mathematical and practical sides of path smoothing. I feel confident about expanding it into more realistic driving systems in the future.
