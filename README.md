@@ -81,6 +81,8 @@ new_cost = cost(x_new) + distance(x_new, neighbor)
 
 RRT* can be configured to decide how many extra iterations it will perform after reaching the destination in several ways. For example, by defining a maximum number of iterations after the destination is first reached, by a time limit, or by defining a quality threshold for the path. In this project, the RRT* implementation is set to stop after a fixed number of iterations. This ensures a balance between exploration and optimization time. Even after the goal is reached, the algorithm will continue sampling and rewiring nodes to improve path efficiency before handing off the result to the smoothing phase.
 
+It is also worth noting that, for this example, the obstacles are inflated (their area is slightly increased outwards) before running the RRT* algorithm. This helps avoid collisions when smoothing the path later.
+
 ### Discretization
 Even if optimized to be short, paths resulting from the RRT* algorithm are not usually realistically drivable. Some extra steps need to be performed on them to make them safe, efficient, and comfortable for an autonomous vehicle.
 
